@@ -22,13 +22,16 @@ function EventDetail(props) {
     </div>
   );
 }
-
-export async function getStaticProps(context) {
-  const { params } = context;
-  const eventItemId = params.eventId;
+async function getData() {
   const filePath = path.join(process.cwd(), "data", "dummy-backend.json");
   const jsonData = await fs.readFile(filePath);
   const data = JSON.parse(jsonData.toString());
+  return data;
+}
+export async function getStaticProps(context) {
+  const { params } = context;
+  const eventItemId = params.eventId;
+  const data = await getData();
 
   const product = data.products.find((item) => item.id === eventItemId);
 
@@ -40,12 +43,11 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths() {
+  const data = await getData();
+  const ids = data.products.map((product) => product.id);
+  const params = ids.map((id: string) => ({ params: { eventId: id } }));
   return {
-    paths: [
-      { params: { eventId: "e1" } },
-      { params: { eventId: "e2" } },
-      { params: { eventId: "e3" } },
-    ],
+    paths: params,
     fallback: true,
   };
 }
