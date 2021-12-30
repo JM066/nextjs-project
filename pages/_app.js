@@ -1,13 +1,14 @@
-import Layout from "../components/Layout";
+import MainHeader from "../components/Layout/MainHeader/index";
 import "../styles/globals.css";
 
 function MyApp(props) {
   const { Component, pageProps } = props;
 
   return (
-    <Layout>
+    <div>
+      <MainHeader />
       <Component {...pageProps} />
-    </Layout>
+    </div>
   );
 }
 

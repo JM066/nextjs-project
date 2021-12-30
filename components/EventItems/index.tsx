@@ -24,7 +24,7 @@ function EventItem({ item: { id, title, image, date, location } }) {
             <time>{readableDate}</time>
           </div>
           <div className={styles.address}>
-            {/* <address>{formattedAddress}</address> */}
+            <address>{formattedAddress}</address>
           </div>
         </div>
         <div className={styles.actions}>
