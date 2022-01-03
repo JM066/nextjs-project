@@ -18,6 +18,7 @@ function EventDetail(props) {
     </div>
   );
 }
+<<<<<<< HEAD
 
 export async function getStaticProps(context) {
   const { params } = context;
@@ -26,6 +27,20 @@ export async function getStaticProps(context) {
   // const jsonData = await fs.readFile(filePath);
   // const data = JSON.parse(jsonData.toString());
   const event = await getEventById(eventItemId);
+=======
+async function getData() {
+  const filePath = path.join(process.cwd(), "data", "dummy-backend.json");
+  const jsonData = await fs.readFile(filePath);
+  const data = JSON.parse(jsonData.toString());
+  return data;
+}
+export async function getStaticProps(context) {
+  const { params } = context;
+  const eventItemId = params.eventId;
+  const data = await getData();
+
+  const product = data.products.find((item) => item.id === eventItemId);
+>>>>>>> ae7aa82d8e5142d80ec7bd9e0404fa157af2bb2f
 
   return {
     props: {
@@ -36,10 +51,18 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths() {
+<<<<<<< HEAD
   const events = await getAllEvents();
   const paths = events.map((event) => ({ params: { eventId: event.id } }));
   return {
     paths: paths,
+=======
+  const data = await getData();
+  const ids = data.products.map((product) => product.id);
+  const params = ids.map((id: string) => ({ params: { eventId: id } }));
+  return {
+    paths: params,
+>>>>>>> ae7aa82d8e5142d80ec7bd9e0404fa157af2bb2f
     fallback: true,
   };
 }
