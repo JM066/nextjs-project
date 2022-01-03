@@ -1,24 +1,20 @@
 import path from "path";
 import fs from "fs/promises";
 
-import { useRouter } from "next/router";
 import EventItem from "../../../components/EventItems";
-import { getEventById } from "../../../dummyData";
+import { getEventById, getAllEvents } from "../../../helpers/api-utils";
 
 function EventDetail(props) {
-  const { loadedProduct } = props;
-  const router = useRouter();
-  const eventId = router.query.eventId;
-  const event = getEventById(eventId);
+  const { selectedEvent } = props;
 
-  if (!loadedProduct || !event) {
+  if (!selectedEvent) {
     return <p>Loading...</p>;
   }
   return (
     <div>
-      <EventItem item={event} />
-      <p>{loadedProduct.title}</p>
-      <p>{loadedProduct.description}</p>
+      <EventItem item={selectedEvent} />
+      <p>{selectedEvent.title}</p>
+      <p>{selectedEvent.description}</p>
     </div>
   );
 }
@@ -26,26 +22,24 @@ function EventDetail(props) {
 export async function getStaticProps(context) {
   const { params } = context;
   const eventItemId = params.eventId;
-  const filePath = path.join(process.cwd(), "data", "dummy-backend.json");
-  const jsonData = await fs.readFile(filePath);
-  const data = JSON.parse(jsonData.toString());
-
-  const product = data.products.find((item) => item.id === eventItemId);
+  // const filePath = path.join(process.cwd(), "data", "dummy-backend.json");
+  // const jsonData = await fs.readFile(filePath);
+  // const data = JSON.parse(jsonData.toString());
+  const event = await getEventById(eventItemId);
 
   return {
     props: {
-      loadedProduct: product,
+      selectedEvent: event,
     },
+    revalidate: 600,
   };
 }
 
 export async function getStaticPaths() {
+  const events = await getAllEvents();
+  const paths = events.map((event) => ({ params: { eventId: event.id } }));
   return {
-    paths: [
-      { params: { eventId: "e1" } },
-      { params: { eventId: "e2" } },
-      { params: { eventId: "e3" } },
-    ],
+    paths: paths,
     fallback: true,
   };
 }

@@ -2,11 +2,11 @@ import EventItem from "../EventItems";
 
 import styles from "./EventList.module.scss";
 
-function EventLst(props) {
-  const { items } = props;
+function EventLst({ items }) {
+  console.log("items", items);
   return (
     <ul className={styles.list}>
-      {items.map((item) => {
+      {items.map((item: any) => {
         return <EventItem key={item.key} item={item} />;
       })}
     </ul>
