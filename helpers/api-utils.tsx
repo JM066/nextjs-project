@@ -21,3 +21,18 @@ export async function getEventById(eventId) {
   const allEvents = await getAllEvents();
   return allEvents.find((event) => event.id === eventId);
 }
+
+// export async function getFilteredEvents(filteredDate) {
+//   const { filteredYear, filteredMonth } = filteredDate;
+//   console.log("filteredYear, filteredMonth ", filteredYear, filteredMonth);
+//   const allEvents = await getAllEvents();
+
+//   return allEvents.filter((event) => {
+//     const eventDate = new Date(event.date);
+
+//     return (
+//       eventDate.getFullYear() === filteredYear &&
+//       eventDate.getMonth() === filteredMonth
+//     );
+//   });
+// }
