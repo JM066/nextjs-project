@@ -9,7 +9,7 @@ function Events(props) {
   const router = useRouter();
   const findEvent = (year: string, month: string) => {
     const fullPath = `/events/${year}/${month}`;
-    router.push(fullPath);
+    router.replace(fullPath);
   };
   return (
     <div className="center">
