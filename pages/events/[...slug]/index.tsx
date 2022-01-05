@@ -1,18 +1,14 @@
+import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import EventList from "../../../components/EventList";
 
-function FilteredEvents() {
+function FilteredEvents({ filtered }) {
   const router = useRouter();
-  const filteredData = router.query.slug;
-  const filteredYear = filteredData[0];
-  const filteredMonth = filteredData[1];
-  const year = +filteredYear;
-  const month = +filteredMonth;
-
   const [data, setData] = useState({});
   const [events, setEvents] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(router.query.slug);
 
   const getFiltered = async () => {
     const response = await fetch(
@@ -24,6 +20,7 @@ function FilteredEvents() {
 
   useEffect(() => {
     getFiltered();
+    setSelectedDate(filtered);
   }, []);
 
   useEffect(() => {
@@ -38,10 +35,24 @@ function FilteredEvents() {
       setEvents(events);
     }
   }, [data]);
+
   if (!events) {
     return <p>There are no events</p>;
   }
+  const filteredYear = selectedDate[0];
+  const filteredMonth = selectedDate[1];
+  const year = +filteredYear;
+  const month = +filteredMonth;
 
+  let headData = (
+    <Head>
+      <title>Filtered Events</title>
+      <meta
+        name="description"
+        content="Find all the coding related events here"
+      />
+    </Head>
+  );
   if (
     isNaN(year) ||
     isNaN(month) ||
@@ -69,11 +80,23 @@ function FilteredEvents() {
   const filteredDate = new Date(year, month - 1);
   return (
     <div>
+      {headData}
       <p>
         {filteredDate.getFullYear()} / {filteredDate.getMonth() + 1}
       </p>
       <EventList items={filteredEvents} />
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const { params } = context;
+  const filtered = params.slug;
+
+  return {
+    props: {
+      filtered: filtered,
+    },
+  };
 }
 export default FilteredEvents;

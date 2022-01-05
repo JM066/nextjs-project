@@ -1,8 +1,10 @@
-import path from "path";
-import fs from "fs/promises";
+// import path from "path";
+// import fs from "fs/promises";
+import Head from "next/head";
 
 import EventItem from "../../../components/EventItems";
 import { getEventById, getAllEvents } from "../../../helpers/api-utils";
+import { Fragment } from "react";
 
 function EventDetail(props) {
   const { selectedEvent } = props;
@@ -11,11 +13,20 @@ function EventDetail(props) {
     return <p>Loading...</p>;
   }
   return (
-    <div>
-      <EventItem item={selectedEvent} />
-      <p>{selectedEvent.title}</p>
-      <p>{selectedEvent.description}</p>
-    </div>
+    <Fragment>
+      <Head>
+        <title>{selectedEvent.title}</title>
+        <meta
+          name="description"
+          content="Find all the coding related events here"
+        />
+      </Head>
+      <div>
+        <EventItem item={selectedEvent} />
+        <p>{selectedEvent.title}</p>
+        <p>{selectedEvent.description}</p>
+      </div>
+    </Fragment>
   );
 }
 
