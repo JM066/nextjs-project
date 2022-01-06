@@ -1,5 +1,5 @@
 import Head from "next/head";
-
+import Layout from "../components/Layout";
 import MainHeader from "../components/Layout/MainHeader/index";
 import "../styles/globals.css";
 
@@ -7,7 +7,7 @@ function MyApp(props) {
   const { Component, pageProps } = props;
 
   return (
-    <div>
+    <Layout>
       <Head>
         <title>Meetup Events</title>
         <meta
@@ -15,9 +15,8 @@ function MyApp(props) {
           content="Find all the coding related events here"
         />
       </Head>
-      <MainHeader />
       <Component {...pageProps} />
-    </div>
+    </Layout>
   );
 }
 
